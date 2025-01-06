@@ -1,7 +1,6 @@
 import puppeteer, { ElementHandle } from 'puppeteer-core';
 import fs from 'fs';
 import axios from 'axios';
-import { error } from 'console';
 
 const browser = await puppeteer.launch({ executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', headless: false});
 const page = await browser.newPage();
