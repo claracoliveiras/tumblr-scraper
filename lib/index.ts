@@ -12,27 +12,40 @@ await page.goto(url);
 
 
 
-async function getImages() {
-	let urls = [];
-	for (let i = 0; i < 27; i++) {
-		let images: ElementHandle<any>[] = [];
 
-		console.log(`Page ${i}`);
+
+async function getImages() {
+	let urls: string[] = [];
+	
+	for (let i = 1; i < 27; i++) {
+		
+		// Holds all the objects in the page with a "img" atribute
+		let images: ElementHandle<any>[] = [];
 		images = images.concat(await page.$$('img'));
-		urls.push(await getUrls(images));
-		console.log(urls);
+
+		// Gets the objects and extracts only the urls using the getUrls() method, then pushes the strings into the urls list
+		let extractedUrls = await getUrls(images);
+		for (let i = 0; i < extractedUrls.length; i++) {
+			urls.push(extractedUrls[i]);
+		}
+
+		// Changes the page
 		await page.goto(`${url}/page/${i}`);
+
 	}
 
 	return urls;
 }
 
 async function getUrls(images: ElementHandle<any>[]) {
-	let urlList = [];
+	let urlList: string[] = [];
 	if (images.length > 0) {
 		for (let i = 0; i < images.length; i++) {
+
+			// Loops through the object list (images) taken by the getImages() function, then extracts only the urls
 			const element = images[i];
 			urlList.push(await page.evaluate(img => img.src, element));
+
 		}
 	}
 
@@ -40,7 +53,7 @@ async function getUrls(images: ElementHandle<any>[]) {
 }
 
 async function downloadImages(urlList: any[]){
-	fs.rmdirSync('./downloaded_images');
+	// fs.rmdirSync('./downloaded_images');
 	fs.mkdirSync('./downloaded_images');
 	if (urlList.length > 0) {
 		for (let i = 0; i < urlList.length; i++) {
